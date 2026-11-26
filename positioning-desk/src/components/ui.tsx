@@ -283,3 +283,14 @@ export function Pill({ children, tone = 'muted' }: { children: ReactNode; tone?:
   const c = { gain: 'bg-gain/15 text-gain', loss: 'bg-loss/15 text-loss', warn: 'bg-warn/15 text-warn', brand: 'bg-brand/15 text-brand', muted: 'bg-surface2 text-muted' }[tone];
   return <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold ${c}`}>{children}</span>;
 }
+
+/** Two-step button: first click arms it, second click within 3s runs the action (no browser confirm dialogs). */
+export function ConfirmButton({ label, confirmLabel = 'Click again to confirm', onConfirm, className = 'btn-ghost' }: { label: ReactNode; confirmLabel?: string; onConfirm: () => void; className?: string }) {
+  const [armed, setArmed] = useState(false);
+  useEffect(() => { if (!armed) return; const t = setTimeout(() => setArmed(false), 3000); return () => clearTimeout(t); }, [armed]);
+  return (
+    <button className={`${className} ${armed ? '!border-loss !text-loss' : ''}`} onClick={() => { if (armed) { setArmed(false); onConfirm(); } else setArmed(true); }}>
+      {armed ? confirmLabel : label}
+    </button>
+  );
+}

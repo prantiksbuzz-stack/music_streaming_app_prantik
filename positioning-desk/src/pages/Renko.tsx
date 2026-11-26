@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from 'recharts';
 import { Card, Guide, PageHeader, Segmented, NumberField } from '../components/ui';
 import { Icon } from '../components/Icon';
-import { tipStyle } from '../components/viz';
+import { tipStyle, CsvButton } from '../components/viz';
 import { renkoBoxes, RENKO_BASE, type RenkoMarket } from '../lib/calc/renko';
 import { downloadCSV, num, parseCSV, pct, uid } from '../lib/format';
 import { usePalette } from '../lib/theme';
@@ -35,7 +35,7 @@ export default function Renko() {
   return (
     <div>
       <PageHeader title="Renko Box Sizer" subtitle='Workbook "Sheet3": ATR-based box sizes scaled down to lower timeframes' icon="renko" accent="from-fuchsia-500 to-brand" actions={<>
-        <button className="btn-ghost" onClick={exportCsv}><Icon name="download" className="h-4 w-4" />CSV</button>
+        <CsvButton onExport={exportCsv} />
         <button className="btn-ghost" onClick={() => file.current?.click()}><Icon name="upload" className="h-4 w-4" />Import</button>
         <input ref={file} type="file" accept=".csv,text/csv" className="hidden" onChange={(e) => e.target.files?.[0] && importCsv(e.target.files[0])} />
       </>} />

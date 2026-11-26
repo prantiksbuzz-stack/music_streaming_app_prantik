@@ -8,7 +8,7 @@
     <title>Positioning Desk</title>
     <script>
       try {
-        var t = localStorage.getItem('pd-theme');
+        var t = document.documentElement.getAttribute('data-theme') || localStorage.getItem('pd-theme');
         var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (dark) document.documentElement.classList.add('dark');
       } catch (e) {}

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState, lazy, Suspense } from 'react';
-import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { hashToPath, pathToHash } from './lib/env';
 import { Icon } from './components/Icon';
 import { Segmented } from './components/ui';
 import { NAV } from './nav';
@@ -68,9 +69,29 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
+  const navigate = useNavigate();
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
+  // Follow a host-provided theme (data-theme on <html>) when one is set
+  useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => { const t = root.getAttribute('data-theme'); if (t === 'dark' || t === 'light') setTheme(t); };
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => mo.disconnect();
+  }, [setTheme]);
+  // Keep a plain #name in the address bar so pages can be bookmarked and shared
+  useEffect(() => {
+    const h = pathToHash(location.pathname);
+    try { if (window.location.hash.replace('#', '') !== h) history.replaceState(null, '', h ? '#' + h : window.location.pathname + window.location.search); } catch { /* ignore */ }
+  }, [location.pathname]);
+  useEffect(() => {
+    const on = () => navigate(hashToPath(window.location.hash));
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, [navigate]);
   useEffect(() => { window.scrollTo({ top: 0 }); }, [location.pathname]);
 
   return (
@@ -95,7 +116,7 @@ export default function App() {
       </AnimatePresence>
 
       <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 border-b border-line bg-bg/80 backdrop-blur">
+        <header className="sticky top-[env(safe-area-inset-top,0px)] z-20 border-b border-line bg-bg/80 backdrop-blur">
           <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2.5 sm:gap-3 lg:px-8">
             <button className="btn-ghost px-2.5 lg:hidden" aria-label="Open menu" onClick={() => setOpen(true)}><Icon name="menu" /></button>
             <div className="lg:hidden"><Brand compact /></div>

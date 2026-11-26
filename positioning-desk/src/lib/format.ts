@@ -33,11 +33,17 @@ export function pct(n: number, dp = 2, sign = false): string {
 export const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 export const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 
-export function downloadCSV(filename: string, rows: (string | number)[][]) {
+/** Downloads a CSV; inside a sandboxed frame (where downloads are blocked) copies it to the clipboard instead. */
+export async function downloadCSV(filename: string, rows: (string | number)[][]): Promise<'downloaded' | 'copied' | 'failed'> {
   const csv = rows.map((r) => r.map((c) => {
     const s = String(c ?? '');
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   }).join(',')).join('\n');
+  let framed = true;
+  try { framed = window.self !== window.top; } catch { /* cross-origin parent */ }
+  if (framed) {
+    try { await navigator.clipboard.writeText(csv); return 'copied'; } catch { return 'failed'; }
+  }
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -45,6 +51,7 @@ export function downloadCSV(filename: string, rows: (string | number)[][]) {
   a.download = filename;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return 'downloaded';
 }
 
 export function parseCSV(text: string): string[][] {

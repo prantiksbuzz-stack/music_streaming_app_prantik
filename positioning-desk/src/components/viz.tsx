@@ -4,6 +4,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
 import { usePalette, draw } from '../lib/theme';
 import { money, num, pct, type Ccy } from '../lib/format';
 import { Icon } from './Icon';
+import { isFramed } from '../lib/env';
 import { useScenarios, type Scenario } from '../store';
 import type { ChargeLine } from '../lib/calc/charges';
 
@@ -220,7 +221,21 @@ export function SaveScenario({ build }: { build: () => Omit<Scenario, 'id' | 'cr
   );
 }
 
+export function CsvButton({ onExport, disabled }: { onExport: () => Promise<'downloaded' | 'copied' | 'failed'>; disabled?: boolean }) {
+  const [msg, setMsg] = useState<string | null>(null);
+  return (
+    <button className="btn-ghost" disabled={disabled} onClick={async () => {
+      const r = await onExport();
+      setMsg(r === 'copied' ? 'CSV copied, paste into Excel' : r === 'failed' ? 'Copy blocked' : 'Downloaded');
+      setTimeout(() => setMsg(null), 2200);
+    }}>
+      <Icon name="download" className="h-4 w-4" />{msg ?? (isFramed ? 'Copy CSV' : 'CSV')}
+    </button>
+  );
+}
+
 export function PrintButton() {
+  if (isFramed) return null;
   return (
     <button className="btn-ghost" onClick={() => window.print()}>
       <Icon name="print" className="h-4 w-4" /> PDF

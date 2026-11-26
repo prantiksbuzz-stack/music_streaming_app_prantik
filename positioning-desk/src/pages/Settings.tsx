@@ -1,4 +1,4 @@
-import { Card, NumberField, PageHeader } from '../components/ui';
+import { Card, ConfirmButton, NumberField, PageHeader } from '../components/ui';
 import { SEGMENT_LABEL, DEFAULT_RATES, type Segment, type SegmentRates } from '../config/charges';
 import { INDEX_SPECS } from '../config/instruments';
 import { useSettings, useScenarios, useJournal, useRenko } from '../store';
@@ -71,10 +71,10 @@ export default function Settings() {
 
       <Card className="mt-5" title="Data">
         <div className="flex flex-wrap gap-2">
-          <button className="btn-ghost" onClick={() => confirm('Remove all saved scenarios?') && clearScen()}>Clear scenarios</button>
-          <button className="btn-ghost" onClick={() => confirm('Remove all journal trades?') && clearJ([])}>Clear journal</button>
+          <ConfirmButton label="Clear scenarios" onConfirm={clearScen} />
+          <ConfirmButton label="Clear journal" onConfirm={() => clearJ([])} />
           <button className="btn-ghost" onClick={resetRenko}>Reset Renko watchlist</button>
-          <button className="btn-ghost" onClick={() => confirm('Reset all settings?') && s.reset()}>Reset settings</button>
+          <ConfirmButton label="Reset settings" onConfirm={s.reset} />
         </div>
       </Card>
     </div>

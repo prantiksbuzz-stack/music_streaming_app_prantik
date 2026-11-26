@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceLine } from 'recharts';
-import { Card, Guide, NumberField, PageHeader, Segmented, Stat, TextField, Pill } from '../components/ui';
+import { Card, Guide, NumberField, PageHeader, Segmented, Stat, TextField, Pill, ConfirmButton } from '../components/ui';
 import { Icon } from '../components/Icon';
-import { tipStyle } from '../components/viz';
+import { tipStyle, CsvButton } from '../components/viz';
 import { ASSET_CLASSES, journalStats, tradePnl, tradeR, type AssetClass, type Trade } from '../lib/calc/journal';
 import { histogram } from '../lib/calc/montecarlo';
 import { downloadCSV, money, num, parseCSV, pct, uid } from '../lib/format';
@@ -49,7 +49,7 @@ export default function Journal() {
   return (
     <div>
       <PageHeader title="Trade Journal" subtitle="What you measure, you can improve: win rate, expectancy, R-multiples, and where you make or lose money" icon="journal" accent="from-sky-500 to-indigo-500" actions={<>
-        <button className="btn-ghost" onClick={exportCsv} disabled={!trades.length}><Icon name="download" className="h-4 w-4" />CSV</button>
+        <CsvButton disabled={!trades.length} onExport={exportCsv} />
         <button className="btn-ghost" onClick={() => file.current?.click()}><Icon name="upload" className="h-4 w-4" />Import</button>
         <input ref={file} type="file" accept=".csv,text/csv" className="hidden" onChange={(e) => e.target.files?.[0] && importCsv(e.target.files[0])} />
       </>} />
@@ -136,7 +136,7 @@ export default function Journal() {
               </Card>
             ))}
           </div>
-          <Card title="Trades" action={<button className="btn-ghost text-xs" onClick={() => { if (confirm('Delete all journal entries?')) replace([]); }}>Clear all</button>}>
+          <Card title="Trades" action={<ConfirmButton className="btn-ghost text-xs" label="Clear all" confirmLabel="Click again to delete all" onConfirm={() => replace([])} />}>
             <div className="-mx-4 max-h-[480px] overflow-auto sm:mx-0">
               <table className="w-full min-w-[760px]">
                 <thead className="sticky top-0 bg-surface"><tr className="border-b border-line"><th className="th">Date</th><th className="th">Instrument</th><th className="th">Class</th><th className="th">Side</th><th className="th">Entry → Exit</th><th className="th">Qty</th><th className="th">P&L</th><th className="th">R</th><th className="th"></th></tr></thead>
