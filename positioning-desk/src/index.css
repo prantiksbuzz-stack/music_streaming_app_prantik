@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 245 247 252;
+  --surface: 255 255 255;
+  --surface2: 239 242 250;
+  --line: 224 229 240;
+  --ink: 15 23 42;
+  --muted: 96 107 130;
+  --brand: 79 70 229;
+  --brand2: 8 145 178;
+  --gain: 4 140 98;
+  --loss: 220 38 38;
+  --warn: 202 110 4;
+  color-scheme: light;
+}
+:root.dark {
+  --bg: 7 10 22;
+  --surface: 15 20 38;
+  --surface2: 22 29 52;
+  --line: 38 47 76;
+  --ink: 229 233 245;
+  --muted: 142 152 178;
+  --brand: 140 150 255;
+  --brand2: 56 189 248;
+  --gain: 52 211 153;
+  --loss: 248 113 113;
+  --warn: 251 191 36;
+  color-scheme: dark;
+}
+
+html, body, #root { min-height: 100%; }
+body {
+  background: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+input, select, button, textarea { font-family: inherit; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+@layer components {
+  .card { @apply rounded-2xl border border-line bg-surface shadow-card; }
+  .field { @apply w-full rounded-xl border border-line bg-surface2/60 px-3 py-2 text-sm text-ink outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/25 tnum; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-bold transition active:scale-[.97] disabled:opacity-50; }
+  .btn-primary { @apply btn bg-brand text-white hover:brightness-110 dark:text-[#0b0f1f]; }
+  .btn-ghost { @apply btn border border-line bg-surface text-ink hover:bg-surface2; }
+  .label { @apply text-[11px] font-bold uppercase tracking-wider text-muted; }
+  .th { @apply px-3 py-2 text-left text-[11px] font-bold uppercase tracking-wider text-muted; }
+  .td { @apply px-3 py-2 text-sm tnum; }
+}
+
+input[type='range'] { accent-color: rgb(var(--brand)); }
+input[type=number]::-webkit-inner-spin-button { opacity: .4; }
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgb(var(--line) / .5) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--line) / .5) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@media print {
+  aside, header nav, .no-print { display: none !important; }
+  body { background: white; }
+  .card { box-shadow: none; break-inside: avoid; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
