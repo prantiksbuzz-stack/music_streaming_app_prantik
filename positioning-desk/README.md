@@ -1,5 +1,9 @@
 # Positioning Desk
 
+**Version 2.0.0** · Released 27 Nov 2026 · Developed by Prantik · © 2026 Prantik. All rights reserved.
+
+Live: https://prantiksbuzz-stack.github.io/music_streaming_app_prantik/
+
 Risk, position-size and P&L calculators for NIFTY/BANKNIFTY options, Indian equity (delivery and intraday), stock options, BTC/ETH and XAUUSD, plus a Renko box sizer, a Monte Carlo risk lab and a trade journal.
 
 The whole app is one self-contained file: `index.html`. Open it in a browser, or serve this folder from any static host.
