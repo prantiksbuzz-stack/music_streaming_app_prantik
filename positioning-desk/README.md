@@ -1,6 +1,6 @@
 # Positioning Desk
 
-**Version 2.0.0** · Released 27 Nov 2026 · Developed by Prantik · © 2026 Prantik. All rights reserved.
+**Version 2.0.0** · Developed by [Prantik](https://linkedin.com/in/prantikdutta)
 
 Live: https://prantiksbuzz-stack.github.io/music_streaming_app_prantik/
 
