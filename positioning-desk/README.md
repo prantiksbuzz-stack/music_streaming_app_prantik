@@ -2,7 +2,7 @@
 
 **Version 2.0.0** · Developed by [Prantik](https://linkedin.com/in/prantikdutta)
 
-Live: https://prantiksbuzz-stack.github.io/music_streaming_app_prantik/
+Live: https://prantiksbuzz-stack.github.io/positioning-desk/
 
 Risk, position-size and P&L calculators for NIFTY/BANKNIFTY options, Indian equity (delivery and intraday), stock options, BTC/ETH and XAUUSD, plus a Renko box sizer, a Monte Carlo risk lab and a trade journal.
 
